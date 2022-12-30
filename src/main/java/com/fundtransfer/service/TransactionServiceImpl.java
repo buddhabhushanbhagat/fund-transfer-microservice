@@ -47,9 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Boolean isDebited = false;
 		Boolean isCredited = false;
 		
-		int responseCode = ApplicationConstants.RESPONSE_CODE_FAILED;
-		
-		
+		String responseStatus = ApplicationConstants.RESPONSE_STATUS_FAILED;
 		Beneficiary beneficiary = restTemplate.getForObject(ApplicationConstants.GET_BENEFICIARY_DETAILS_URL+transaction.getAccountNumber(), Beneficiary.class);
 		if(beneficiary.getMaxTsfrLimit()<0 || beneficiary.getMaxTsfrLimit() == 0)
 			throw new TransferLimitExceededException("Beneficiary transaction limit exceeded");
@@ -63,10 +61,10 @@ public class TransactionServiceImpl implements TransactionService {
 		if(isDebited) {
 			isCredited = restTemplate.exchange(ApplicationConstants.CREDIT_BENEFICIARY_BALANCE_URL+transaction.getAccountNumber(),HttpMethod.PUT,httpEntity,Boolean.class).getBody();
 			int updatedTransferLimit = restTemplate.exchange(ApplicationConstants.DECREASE_BENEFICIARY_TRANSACTION_LIMIT_URL+transaction.getAccountNumber(),HttpMethod.PUT,null,Integer.class).getBody();
-			responseCode = ApplicationConstants.RESPONSE_CODE_SUCESS;
+			responseStatus = ApplicationConstants.RESPONSE_STATUS_SUCESS;
 		}
 		
-		transaction.setResponceCode(responseCode);
+		transaction.setResponseStatus(responseStatus);
 		return transaction;
 	}
 
@@ -79,7 +77,12 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<Transaction> getTransactionBetweenDates(Date transactionStartDate, Date transactionEndDate) {
 		// TODO Auto-generated method stub
-		return transRepo.findByTransactionDateBetween(transactionStartDate,transactionEndDate);
+		List<Transaction> transactionList = transRepo.findByTransactionDateBetween(transactionStartDate,transactionEndDate);
+		transactionList.forEach(transaction->{
+			Long remitterAccNumber = transaction.getRemitterAccountNumber();
+			Long beneficiaryAccNumber = transaction.getAccountNumber();
+		});
+		return transactionList;
 	}
 
 }

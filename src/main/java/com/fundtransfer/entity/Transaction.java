@@ -2,23 +2,30 @@ package com.fundtransfer.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+//import jakarta.persistence.Column;
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
+//import jakarta.persistence.Id;
+//import jakarta.persistence.Temporal;
+//import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
 		@Id
 	    private Long transactionId;
@@ -26,11 +33,12 @@ public class Transaction {
 	    private Long remitterAccountNumber; //remitterAccNo
 	    private Long accountNumber; //BeneAccNo
 	    private Double amounTransfered;
+	    
 	    private String narration;
 	    
 	    private Double remitterAccountBalance; //BeneAccNo
 	    private Double beneficiaryAccountBalance; //BeneAccNo
-	    private int responceCode;
+	    private String responseStatus;
 	    @CreationTimestamp
 		@Temporal(TemporalType.TIMESTAMP)
 		@Column(nullable = false, updatable = false)
