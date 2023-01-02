@@ -47,6 +47,7 @@ public class TransactionController {
 		Date transactionEndDateConverted = sdf1.parse(transactionEndDate);
 		
 		List<Transaction> transactionList = transService.getTransactionBetweenDates(transactionStartDateConverted,transactionEndDateConverted);
+		System.out.println(transactionList);
 		return transactionList;
 	}
 	

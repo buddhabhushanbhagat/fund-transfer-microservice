@@ -49,8 +49,13 @@ public class TransactionServiceImpl implements TransactionService {
 		
 		String responseStatus = ApplicationConstants.RESPONSE_STATUS_FAILED;
 		Beneficiary beneficiary = restTemplate.getForObject(ApplicationConstants.GET_BENEFICIARY_DETAILS_URL+transaction.getAccountNumber(), Beneficiary.class);
-		if(beneficiary.getMaxTsfrLimit()<0 || beneficiary.getMaxTsfrLimit() == 0)
+		if(beneficiary.getMaxTsfrLimit()<0 || beneficiary.getMaxTsfrLimit() == 0) {
+			//saving failed transaction record
+			transaction.setResponseStatus(responseStatus);
+			saveTransaction(transaction);
 			throw new TransferLimitExceededException("Beneficiary transaction limit exceeded");
+
+		}
 		
 		MultiValueMap<String, Double> body = new LinkedMultiValueMap<String, Double>();     
 		body.add("amount", transaction.getAmounTransfered());
