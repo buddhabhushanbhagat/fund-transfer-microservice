@@ -89,7 +89,7 @@ public class TransactionController {
 	// Create text file
 		Path exportedPath = fileExporter.export(fileContent, fileName);
 		File exportedFile = exportedPath.toFile();
-
+	//Reading file data
 		FileInputStream fis = new FileInputStream(exportedFile);
 		String readFileContent = "";
 		int data = 0;
